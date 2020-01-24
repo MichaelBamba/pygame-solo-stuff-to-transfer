@@ -30,18 +30,20 @@ screen = pygame.display.set_mode([800, 600])
 clock = pygame.time.Clock()
 
 bullets = pygame.sprite.Group()
-shot_image = pygame.image.load('images/shot.jpg').convert()
-blood1 = pygame.image.load('img/blood1.jpg').convert()
-blood1 = pygame.transform.scale(blood1, (50, 50))
-blood2 = pygame.image.load('img/blood2.jpg').convert()
+shot_image = pygame.image.load('img/shot.png').convert_alpha()
+blood1 = pygame.image.load('img/blood1.png').convert_alpha()
+blood1 = pygame.transform.scale(blood1, (60, 60))
+blood2 = pygame.image.load('img/blood2.png').convert_alpha()
 blood2 = pygame.transform.scale(blood2, (50, 50))
-shot_image = pygame.transform.scale(shot_image, (50, 50))
-hero_image = pygame.image.load('images/wizard.jpg').convert_alpha()
+shot_image = pygame.transform.scale(shot_image, (52, 52))
+hero_image = pygame.image.load('img/hero.png').convert_alpha()
 hero_image = pygame.transform.scale(hero_image, (90, 90))
 skeleton_image = pygame.image.load('img/enemyskelly.png').convert_alpha()
 skeleton_image = pygame.transform.scale(skeleton_image, (90, 90))
 wizard_image = pygame.image.load('img/wizard.png').convert_alpha()
 wizard_image = pygame.transform.scale(wizard_image, (90, 90))
+pumpkin_image = pygame.image.load('img/enemypump.png').convert_alpha()
+pumpkin_image = pygame.transform.scale(pumpkin_image, (120, 120))
 dragon_image = pygame.image.load('img/Dragon.png').convert_alpha()
 dragon_image = pygame.transform.scale(dragon_image, (120, 120))
 
@@ -118,10 +120,10 @@ class Monster(pygame.sprite.Sprite):
             self.kill()
 
 class Blood(pygame.sprite.Sprite):
-    def __init__(self, center, size):
+    def __init__(self, image, center, size):
         pygame.sprite.Sprite.__init__(self)
         self.size = size
-        self.image = blood1
+        self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = center
         self.frame = 0
@@ -141,11 +143,13 @@ class Blood(pygame.sprite.Sprite):
                 self.rect.center = center
 
 def newMonster():
-    roll = random.randint(1, 2)
+    roll = random.randint(1, 3)
     if roll == 1:
         a = Monster(skeleton_image)
     if roll == 2:
         a = Monster(wizard_image)
+    if roll == 3:
+        a = Monster(pumpkin_image)
     sprites.add(a)
     enemy_sprites.add(a)
 
@@ -194,8 +198,11 @@ while running:
     hits = pygame.sprite.groupcollide(enemy_sprites, bullets, True, True)
     for hit in hits:
         score += 1
-        # newMonster()
-        blood = Blood(hit.rect.center, 3)
+        random_roll = random.randint(1, 6)
+        if random_roll > 3:
+            blood = Blood(blood1, hit.rect.center, 3)
+        elif random_roll <= 3:
+            blood = Blood(blood2, hit.rect.center, 3)
         sprites.add(blood)
         blood_group.add (blood)
         if len(shots_out) > 0:
