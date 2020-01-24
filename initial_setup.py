@@ -39,6 +39,8 @@ hero_image = pygame.image.load('images/wizard.jpg').convert_alpha()
 hero_image = pygame.transform.scale(hero_image, (90, 90))
 skeleton_image = pygame.image.load('img/enemyskelly.png').convert_alpha()
 skeleton_image = pygame.transform.scale(skeleton_image, (90, 90))
+wizard_image = pygame.image.load('img/wizard.png').convert_alpha()
+wizard_image = pygame.transform.scale(wizard_image, (90, 90))
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, image, pos):
@@ -144,8 +146,13 @@ class Blood(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 75
+
 def newMonster():
-    a = Monster(skeleton_image)
+    roll = random.randint(1, 2)
+    if roll == 1:
+        a = Monster(skeleton_image)
+    if roll == 2:
+        a = Monster(wizard_image)
     sprites.add(a)
     enemy_sprites.add(a)
 
