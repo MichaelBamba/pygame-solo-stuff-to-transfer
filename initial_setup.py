@@ -94,7 +94,7 @@ class Char(pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.life = 5
         self.rect.center = [self.x, self.y]
-        self.shoot_delay = 250
+        self.shoot_delay = 270
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.last_shot > self.shoot_delay:
@@ -181,7 +181,7 @@ score = 0
 running = True
 while running:
     
-    # clock.tick(60)
+    clock.tick(60)
     for event in pygame.event.get():
         pressed_keys = pygame.key.get_pressed()
         pos = pygame.mouse.get_pos()
