@@ -42,8 +42,8 @@ skeleton_image = pygame.image.load('img/enemyskelly.png').convert_alpha()
 skeleton_image = pygame.transform.scale(skeleton_image, (90, 90))
 wizard_image = pygame.image.load('img/wizard.png').convert_alpha()
 wizard_image = pygame.transform.scale(wizard_image, (90, 90))
-pumpkin_image = pygame.image.load('img/enemypump.png').convert_alpha()
-pumpkin_image = pygame.transform.scale(pumpkin_image, (120, 120))
+ghost_image = pygame.image.load('img/ghost.gif').convert_alpha()
+ghost_image = pygame.transform.scale(ghost_image, (120, 120))
 dragon_image = pygame.image.load('img/Dragon.png').convert_alpha()
 dragon_image = pygame.transform.scale(dragon_image, (120, 120))
 
@@ -149,7 +149,7 @@ def newMonster():
     if roll == 2:
         a = Monster(wizard_image)
     if roll == 3:
-        a = Monster(pumpkin_image)
+        a = Monster(ghost_image)
     sprites.add(a)
     enemy_sprites.add(a)
 
