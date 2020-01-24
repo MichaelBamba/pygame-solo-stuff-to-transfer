@@ -34,7 +34,7 @@ shot_image = pygame.image.load('img/shot.png').convert_alpha()
 blood1 = pygame.image.load('img/blood1.png').convert_alpha()
 blood1 = pygame.transform.scale(blood1, (60, 60))
 blood2 = pygame.image.load('img/blood2.png').convert_alpha()
-blood2 = pygame.transform.scale(blood2, (50, 50))
+blood2 = pygame.transform.scale(blood2, (70, 70))
 shot_image = pygame.transform.scale(shot_image, (52, 52))
 hero_image = pygame.image.load('img/hero.png').convert_alpha()
 hero_image = pygame.transform.scale(hero_image, (90, 90))
@@ -138,7 +138,7 @@ class Blood(pygame.sprite.Sprite):
                 self.kill()
             else:
                 center = self.rect.center
-                self.image = blood1
+                self.image = blood2
                 self.rect = self.image.get_rect()
                 self.rect.center = center
 
