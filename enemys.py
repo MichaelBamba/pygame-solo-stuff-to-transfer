@@ -1,15 +1,14 @@
 import pygame
 import random
 
-WIDTH = 480
-HEIGHT = 600
+WIDTH = 900
+HEIGHT = 500
 FPS = 60
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 enacolor = (255, 134, 0)
 RANDOMCOLLOR = (0, 255, 100)
-pumpkin = pygame.image.load(path.join(img_dir,"enemypump.png")
 
 pygame.init()
 pygame.mixer.init()
@@ -44,7 +43,7 @@ class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((30, 40))
-        self.image = pumpkin
+        self.image.fill(enacolor)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
