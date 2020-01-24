@@ -1,5 +1,6 @@
 import pygame
 import random
+import pygame.sprite as sprite
 
 from pygame.locals import (
     K_UP,
@@ -41,30 +42,8 @@ skeleton_image = pygame.image.load('img/enemyskelly.png').convert_alpha()
 skeleton_image = pygame.transform.scale(skeleton_image, (90, 90))
 wizard_image = pygame.image.load('img/wizard.png').convert_alpha()
 wizard_image = pygame.transform.scale(wizard_image, (90, 90))
-
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self, image, pos):
-        super(Enemy, self).__init__()
-        self.surf = pygame.Surface((20, 10))
-        self.surf.fill((255, 255, 255))
-        self.image = image
-        self.pos = [random.randint(20, 30), ]
-        self.rect = self.surf.get_rect(
-            center=(
-                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
-                random.randint(0, SCREEN_HEIGHT),
-            )
-        )
-        self.speed = random.randint(5, 20)
-
-    def update(self):
-        self.rect.move_ip(-self.speed, 0)
-        if self.rect.left < 0:
-            self.kill()
-        if self.rect.right < 0:
-            self.kill()
-        if self.rect.top < 0:
-            self.kill()
+dragon_image = pygame.image.load('img/Dragon.png').convert_alpha()
+dragon_image = pygame.transform.scale(dragon_image, (120, 120))
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -123,6 +102,7 @@ class Char(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
+
 class Monster(pygame.sprite.Sprite):
     def __init__(self, image):
         pygame.sprite.Sprite.__init__(self)
@@ -136,6 +116,7 @@ class Monster(pygame.sprite.Sprite):
         self.rect.move_ip(0, self.speed)
         if self.rect.left > 600:
             self.kill()
+
 class Blood(pygame.sprite.Sprite):
     def __init__(self, center, size):
         pygame.sprite.Sprite.__init__(self)
@@ -146,6 +127,18 @@ class Blood(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 75
+    def update(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == 3:
+                self.kill()
+            else:
+                center = self.rect.center
+                self.image = blood1
+                self.rect = self.image.get_rect()
+                self.rect.center = center
 
 def newMonster():
     roll = random.randint(1, 2)
@@ -162,7 +155,7 @@ player = Char(hero_image)
 enemy_sprites = pygame.sprite.Group()
 sprites = pygame.sprite.Group()
 shot = pygame.sprite.groupcollide(enemy_sprites, bullets, True, True)
-
+blood_group = pygame.sprite.Group()
 sprites.add(player)
 shots_out = []
 def redrawGameWindow():
@@ -170,14 +163,15 @@ def redrawGameWindow():
     sprites.draw(screen)
     bullets.draw(screen)
     bullets.update()
+    blood_group.update()
     enemy_sprites.update()
     pygame.display.update()
     player.update(pressed_keys, pos)
-    # sprites.update()
+    
 level = 1
 difficulty = 1
 score = 0
-
+counter = 0
 running = True
 while running:
     
@@ -191,6 +185,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
     # if pressed_keys[K_SPACE]:
     #     if len(shots_out) <= 5:
     #         player.shoot()
@@ -199,11 +194,12 @@ while running:
     hits = pygame.sprite.groupcollide(enemy_sprites, bullets, True, True)
     for hit in hits:
         score += 1
-        # blood = Blood(hit.rect.center, blood1)
-        # sprites.add(blood)
+        # newMonster()
+        blood = Blood(hit.rect.center, 3)
+        sprites.add(blood)
+        blood_group.add (blood)
         if len(shots_out) > 0:
             shots_out.pop()
-
 
     hits = pygame.sprite.spritecollide(player, enemy_sprites, True, pygame.sprite.collide_circle)
     for hit in hits:
@@ -220,9 +216,9 @@ while running:
     screen.fill((75, 22, 75))
 
     
-    surf = pygame.Surface((50, 50))
-    surf.fill((0,0,0))
-    
+    # surf = pygame.Surface((50, 50))
+    # surf.fill((0,0,0))
+    counter += 1
     redrawGameWindow()
     pygame.display.flip()
     
